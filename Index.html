@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Subnet-X - Advanced IPv4 Subnetting Calculator">
+    <meta name="author" content="Subnet-X">
+
+    <title>Subnet-X | IPv4 Subnetting Calculator</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ============================= -->
+    <!-- BACKGROUND -->
+    <!-- ============================= -->
+
+    <div class="background-grid"></div>
+
+    <!-- ============================= -->
+    <!-- HEADER -->
+    <!-- ============================= -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                SX
+            </div>
+
+            <div>
+                <h1>Subnet-X</h1>
+                <span>Advanced IPv4 Subnetting Suite</span>
+            </div>
+
+        </div>
+
+        <div class="top-actions">
+
+            <div class="status">
+                <span class="status-dot"></span>
+                Calculator Online
+            </div>
+
+            <button id="themeToggle" class="icon-btn" title="Toggle theme">
+                ☼
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- ============================= -->
+    <!-- MAIN -->
+    <!-- ============================= -->
+
+    <main class="container">
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="eyebrow">
+                    NETWORK ENGINEERING TOOL
+                </div>
+
+                <h2>
+                    IPv4 Subnetting,
+                    <span>simplified.</span>
+                </h2>
+
+                <p>
+                    Calculate network ranges, hosts, masks, CIDR,
+                    VLSM and subnet distributions from one powerful
+                    networking dashboard.
+                </p>
+
+            </div>
+
+            <div class="hero-terminal">
+
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                    </div>
+
+                    <span>subnet-x://calculator</span>
+                </div>
+
+                <div class="terminal-body">
+                    <div><span class="terminal-green">root@subnet-x</span>:~$ subnet --analyze</div>
+                    <div class="terminal-muted">Analyzing IPv4 network...</div>
+                    <div class="terminal-green">✓ Network engine ready</div>
+                    <div class="terminal-muted">✓ CIDR parser ready</div>
+                    <div class="terminal-muted">✓ VLSM engine ready</div>
+                    <div class="terminal-cursor">_</div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- CALCULATOR -->
+        <!-- ============================= -->
+
+        <section class="panel calculator-panel">
+
+            <div class="panel-heading">
+
+                <div>
+                    <span class="section-label">01 / INPUT</span>
+                    <h3>Subnet Calculator</h3>
+                    <p>Enter an IPv4 address and prefix length.</p>
+                </div>
+
+                <button id="resetBtn" class="secondary-btn">
+                    ↻ Reset
+                </button>
+
+            </div>
+
+
+            <div class="input-layout">
+
+                <div class="ip-input-group">
+
+                    <label for="ipAddress">
+                        IPv4 Address
+                    </label>
+
+                    <div class="ip-field">
+
+                        <span class="field-prefix">IPv4</span>
+
+                        <input
+                            id="ipAddress"
+                            type="text"
+                            value="192.168.1.10"
+                            placeholder="192.168.1.10"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+                    <small>
+                        Example: 192.168.1.10
+                    </small>
+
+                </div>
+
+
+                <div class="cidr-input-group">
+
+                    <label for="cidr">
+                        CIDR Prefix
+                    </label>
+
+                    <div class="cidr-row">
+
+                        <input
+                            id="cidr"
+                            type="number"
+                            min="0"
+                            max="32"
+                            value="24"
+                        >
+
+                        <span>/</span>
+
+                        <strong id="cidrDisplay">24</strong>
+
+                    </div>
+
+                    <input
+                        id="cidrSlider"
+                        class="range"
+                        type="range"
+                        min="0"
+                        max="32"
+                        value="24"
+                    >
+
+                </div>
+
+
+                <div class="calculate-container">
+
+                    <button id="calculateBtn" class="primary-btn">
+                        Calculate
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div id="errorBox" class="error-box hidden">
+                <span>!</span>
+                <p id="errorMessage"></p>
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- SUMMARY -->
+        <!-- ============================= -->
+
+        <section class="results-section">
+
+            <div class="section-title-row">
+
+                <div>
+                    <span class="section-label">02 / RESULT</span>
+                    <h3>Network Overview</h3>
+                </div>
+
+                <div class="result-actions">
+
+                    <button id="copyBtn" class="secondary-btn">
+                        ⧉ Copy
+                    </button>
+
+                    <button id="exportBtn" class="secondary-btn">
+                        ↓ Export
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="stats-grid">
+
+                <div class="stat-card accent">
+
+                    <div class="stat-icon">⌁</div>
+
+                    <div>
+                        <span>NETWORK</span>
+                        <strong id="networkResult">
+                            192.168.1.0
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">◉</div>
+
+                    <div>
+                        <span>BROADCAST</span>
+                        <strong id="broadcastResult">
+                            192.168.1.255
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">#</div>
+
+                    <div>
+                        <span>USABLE HOSTS</span>
+                        <strong id="hostsResult">
+                            254
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">/</div>
+
+                    <div>
+                        <span>CIDR</span>
+                        <strong id="cidrResult">
+                            /24
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- DETAILS -->
+        <!-- ============================= -->
+
+        <section class="detail-grid">
+
+
+            <!-- NETWORK DETAILS -->
+
+            <div class="panel">
+
+                <div class="panel-heading compact">
+
+                    <div>
+                        <span class="section-label">NETWORK DATA</span>
+                        <h3>Address Information</h3>
+                    </div>
+
+                </div>
+
+
+                <div class="data-list">
+
+                    <div class="data-row">
+                        <span>Input IP</span>
+                        <strong id="detailIp">192.168.1.10</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Network Address</span>
+                        <strong id="detailNetwork">192.168.1.0</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Broadcast Address</span>
+                        <strong id="detailBroadcast">192.168.1.255</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>First Usable</span>
+                        <strong id="detailFirst">192.168.1.1</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Last Usable</span>
+                        <strong id="detailLast">192.168.1.254</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Subnet Mask</span>
+                        <strong id="detailMask">255.255.255.0</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Wildcard Mask</span>
+                        <strong id="detailWildcard">0.0.0.255</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>IP Class</span>
+                        <strong id="detailClass">Class C</strong>
+                    </div>
+
+                    <div class="data-row">
+                        <span>Address Type</span>
+                        <strong id="detailType">Private</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HOST INFORMATION -->
+
+            <div class="panel">
+
+                <div class="panel-heading compact">
+
+                    <div>
+                        <span class="section-label">CAPACITY</span>
+                        <h3>Host Information</h3>
+                    </div>
+
+                </div>
+
+
+                <div class="capacity-box">
+
+                    <div class="capacity-number">
+                        <strong id="capacityHosts">254</strong>
+                        <span>usable hosts</span>
+                    </div>
+
+                    <div class="capacity-bar">
+                        <div id="capacityFill"></div>
+                    </div>
+
+                </div>
+
+
+                <div class="host-grid">
+
+                    <div>
+                        <span>Host Bits</span>
+                        <strong id="hostBits">8</strong>
+                    </div>
+
+                    <div>
+                        <span>Network Bits</span>
+                        <strong id="networkBits">24</strong>
+                    </div>
+
+                    <div>
+                        <span>Total Addresses</span>
+                        <strong id="totalAddresses">256</strong>
+                    </div>
+
+                    <div>
+                        <span>Subnet Mask Bits</span>
+                        <strong id="maskBits">24</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- BINARY -->
+        <!-- ============================= -->
+
+        <section class="panel binary-panel">
+
+            <div class="panel-heading compact">
+
+                <div>
+                    <span class="section-label">03 / BINARY</span>
+                    <h3>Binary Representation</h3>
+                </div>
+
+            </div>
+
+
+            <div class="binary-container">
+
+                <div class="binary-row">
+
+                    <div class="binary-label">
+                        IP Address
+                    </div>
+
+                    <div id="binaryIp" class="binary-value">
+                        11000000.10101000.00000001.00001010
+                    </div>
+
+                </div>
+
+
+                <div class="binary-row">
+
+                    <div class="binary-label">
+                        Subnet Mask
+                    </div>
+
+                    <div id="binaryMask" class="binary-value">
+                        11111111.11111111.11111111.00000000
+                    </div>
+
+                </div>
+
+
+                <div class="binary-row">
+
+                    <div class="binary-label">
+                        Network
+                    </div>
+
+                    <div id="binaryNetwork" class="binary-value">
+                        11000000.10101000.00000001.00000000
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- SUBNET GENERATOR -->
+        <!-- ============================= -->
+
+        <section class="panel subnet-generator">
+
+            <div class="panel-heading">
+
+                <div>
+                    <span class="section-label">04 / SUBNET GENERATOR</span>
+                    <h3>Generate Subnet Table</h3>
+                    <p>Split the current network into smaller subnets.</p>
+                </div>
+
+            </div>
+
+
+            <div class="generator-controls">
+
+                <div>
+
+                    <label for="subnetCount">
+                        Number of Subnets
+                    </label>
+
+                    <select id="subnetCount">
+
+                        <option value="2">2 Subnets</option>
+                        <option value="4">4 Subnets</option>
+                        <option value="8">8 Subnets</option>
+                        <option value="16">16 Subnets</option>
+                        <option value="32">32 Subnets</option>
+                        <option value="64">64 Subnets</option>
+                        <option value="128">128 Subnets</option>
+
+                    </select>
+
+                </div>
+
+                <button id="generateBtn" class="primary-btn">
+                    Generate Subnets →
+                </button>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>#</th>
+                            <th>Network</th>
+                            <th>First Host</th>
+                            <th>Last Host</th>
+                            <th>Broadcast</th>
+                            <th>CIDR</th>
+                            <th>Hosts</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="subnetTableBody">
+
+                        <tr>
+                            <td colspan="7" class="empty-table">
+                                Generate a subnet table to see results.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- VLSM -->
+        <!-- ============================= -->
+
+        <section class="panel vlsm-panel">
+
+            <div class="panel-heading">
+
+                <div>
+
+                    <span class="section-label">05 / VLSM</span>
+
+                    <h3>VLSM Calculator</h3>
+
+                    <p>
+                        Calculate variable-length subnets based on
+                        required host counts.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="vlsm-input-area">
+
+                <div>
+
+                    <label for="vlsmNetwork">
+                        Base Network
+                    </label>
+
+                    <input
+                        id="vlsmNetwork"
+                        type="text"
+                        value="192.168.10.0/24"
+                        placeholder="192.168.10.0/24"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label for="vlsmHosts">
+                        Required Hosts
+                    </label>
+
+                    <input
+                        id="vlsmHosts"
+                        type="text"
+                        value="100, 50, 20, 10"
+                        placeholder="100, 50, 20, 10"
+                    >
+
+                </div>
+
+                <button id="vlsmBtn" class="primary-btn">
+                    Calculate VLSM →
+                </button>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>#</th>
+                            <th>Required</th>
+                            <th>Network</th>
+                            <th>CIDR</th>
+                            <th>First Host</th>
+                            <th>Last Host</th>
+                            <th>Broadcast</th>
+                            <th>Available</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="vlsmTableBody">
+
+                        <tr>
+                            <td colspan="8" class="empty-table">
+                                Enter host requirements and calculate VLSM.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- ============================= -->
+        <!-- QUICK REFERENCE -->
+        <!-- ============================= -->
+
+        <section class="panel reference-panel">
+
+            <div class="panel-heading compact">
+
+                <div>
+                    <span class="section-label">REFERENCE</span>
+                    <h3>CIDR Quick Reference</h3>
+                </div>
+
+            </div>
+
+
+            <div class="reference-grid">
+
+                <div class="reference-card">
+                    <strong>/30</strong>
+                    <span>2 Usable Hosts</span>
+                </div>
+
+                <div class="reference-card">
+                    <strong>/29</strong>
+                    <span>6 Usable Hosts</span>
+                </div>
+
+                <div class="reference-card">
+                    <strong>/28</strong>
+                    <span>14 Usable Hosts</span>
+                </div>
+
+                <div class="reference-card">
+                    <strong>/27</strong>
+                    <span>30 Usable Hosts</span>
+                </div>
+
+                <div class="reference-card">
+                    <strong>/26</strong>
+                    <span>62 Usable Hosts</span>
+                </div>
+
+                <div class="reference-card">
+                    <strong>/25</strong>
+                    <span>126 Usable Hosts</span>
+                </div>
+
+                <div class="reference-card">
+                    <strong>/24</strong>
+                    <span>254 Usable Hosts</span>
+                </div>
+
+                <div class="reference-card">
+                    <strong>/23</strong>
+                    <span>510 Usable Hosts</span>
+                </div>
+
+                <div class="reference-card">
+                    <strong>/22</strong>
+                    <span>1022 Usable Hosts</span>
+                </div>
+
+                <div class="reference-card">
+                    <strong>/21</strong>
+                    <span>2046 Usable Hosts</span>
+                </div>
+
+                <div class="reference-card">
+                    <strong>/20</strong>
+                    <span>4094 Usable Hosts</span>
+                </div>
+
+                <div class="reference-card">
+                    <strong>/16</strong>
+                    <span>65534 Usable Hosts</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ============================= -->
+    <!-- FOOTER -->
+    <!-- ============================= -->
+
+    <footer>
+
+        <div class="footer-brand">
+            <strong>Subnet-X</strong>
+            <span>IPv4 Network Engineering Toolkit</span>
+        </div>
+
+        <div>
+            Built for networking students & engineers.
+        </div>
+
+        <div>
+            © 2026 Subnet-X
+        </div>
+
+    </footer>
+
+
+    <!-- TOAST -->
+
+    <div id="toast" class="toast">
+        <span>✓</span>
+        <p>Copied successfully.</p>
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
